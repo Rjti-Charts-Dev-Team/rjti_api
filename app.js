@@ -22,12 +22,13 @@ const DEV_ORIGINS = ['http://localhost:5173/', 'http://localhost:5174/', 'http:/
 const PROD_ORIGINS = ['https://rjticharts.com/','https://www.rjticharts.com/','https://www.rjticharts.com', 'https://admin.rjticharts.com/', 'https://rjticharts.com', 'https://admin.rjticharts.com']
 
 // Middleware
-app.use(cors({
-    origin: node_env === 'prod' ? PROD_ORIGINS : DEV_ORIGINS,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token', 'token', 'reset-token'],
-}));
+// app.use(cors({
+//     origin: node_env === 'prod' ? PROD_ORIGINS : DEV_ORIGINS,
+//     credentials: true,
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token', 'token', 'reset-token'],
+// }));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

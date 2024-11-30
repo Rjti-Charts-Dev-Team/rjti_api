@@ -41,7 +41,7 @@ const UserSchema = new Schema({
     otpType: {
         type: String,
         default: 'auth',
-        enum: ['auth', 'reset']
+        enum: ['auth', 'reset','']
     },
     resetToken: {
         type: String,
