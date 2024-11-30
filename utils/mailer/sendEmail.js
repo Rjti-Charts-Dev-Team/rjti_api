@@ -9,7 +9,7 @@
 
 const SES = require("../aws/ses/SES");
 
-async function sendEmail(fromMail, senderName, to, subject, body) {
+async function sendEmail({ fromMail, senderName, to, subject, body }) {
 
     const from = `${senderName} <${fromMail}>`;
 
@@ -39,3 +39,5 @@ async function sendEmail(fromMail, senderName, to, subject, body) {
         throw error;
     }
 }
+
+module.exports = sendEmail;

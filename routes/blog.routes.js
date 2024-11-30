@@ -81,7 +81,7 @@ router.post('/update/:id', verifyAdmin, async (req, res) => {
 
         const blog = await Blog.findByIdAndUpdate(req.params.id, { ...data, isPremium }, { new: true });
 
-        if(!blog){
+        if (!blog) {
             return res.status(404).json({
                 error: 'Blog not found'
             });
@@ -119,7 +119,7 @@ router.get('/admin/all', verifyAdmin, async (req, res) => {
 
 })
 
-router.get('/user/all', verifyUser, async (req, res) => {
+router.get('/user/premium', verifyUser, async (req, res) => {
 
     try {
 
@@ -143,6 +143,25 @@ router.get('/user/all', verifyUser, async (req, res) => {
         res.status(200).json({
             success: true,
             data: blogsAll
+        });
+
+    } catch (error) {
+
+        errorLogger(error, req, res)
+
+    }
+
+})
+
+router.get('/user/non-premium', async (req, res) => {
+
+    try {
+
+        const blogs = await Blog.find({ isPremium: false }).sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            data: blogs
         });
 
     } catch (error) {

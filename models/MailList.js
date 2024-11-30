@@ -1,5 +1,6 @@
 const { Schema, model, Error } = require('mongoose');
 const User = require('./User');
+const SmsList = require('./SmsList');
 
 const MailListSchema = new Schema({
 
@@ -12,6 +13,10 @@ const MailListSchema = new Schema({
         required: true
     },
     content: {
+        type: String,
+        required: true
+    },
+    textContent:{
         type: String,
         required: true
     },
@@ -35,7 +40,7 @@ MailListSchema.pre('save', async function (next) {
         const sms = new SmsList({
             toNumber: userData.contactNo,
             name: this.name,
-            content: this.content,
+            content: this.textContent,
             type: 'signalemail'
         });
 
@@ -47,6 +52,33 @@ MailListSchema.pre('save', async function (next) {
 
     }
 
+});
+
+MailListSchema.pre('insertMany', async function (docs, next) {
+
+    try {
+
+        for (const doc of docs) {
+
+            if (doc.type === 'signalemail') {
+                const userData = await User.findOne({ email: doc.emailTo });
+
+                const sms = new SmsList({
+                    toNumber: userData.contactNo,
+                    name: doc.name,
+                    content: doc.content,
+                    type: 'signalemail'
+                });
+
+                await sms.save(); // Ensure SMS is saved
+            }
+
+        }
+
+        next(); // Proceed with the bulk insert
+    } catch (error) {
+        next(error); // Handle errors properly
+    }
 });
 
 module.exports = model('maillist', MailListSchema);
